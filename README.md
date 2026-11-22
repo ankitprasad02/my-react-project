@@ -1,167 +1,167 @@
-# DocPulse - Doctor Appointment Scheduling & Real-Time Patient Delay Notification System
+# PulseQ — Doctor Appointment Scheduling & Real-Time Delay Notification System
 
-A modern, responsive healthcare SaaS web application built with **React.js, Vite, and Tailwind CSS**. Designed for clinics, hospitals, and outpatient departments (OPDs) where doctors see multiple patients daily, and delay notifications must be automatically computed and dispatched to waiting patients in real-time.
-
----
-
-## 🌟 Key Features & Highlights
-
-### 0. 🌐 Modern SaaS Home Landing Page (`/`)
-- **Hero Presentation:** High-impact introduction to zero-wait outpatient queue management and deterministic delay recalculation.
-- **Embedded Live Queue Search Widget:** Visitors can enter an Appointment ID or phone number directly from the homepage to check their status with 1-click sample token buttons.
-- **Live OPD Metrics Banner:** Real-time counters showing total appointments, waiting patients, completed consultations, and outbound notifications dispatched today.
-- **Dedicated Role Portals Showcase:** Interactive launchpad cards for **Admin / Reception**, **Doctor Desk**, and **Patient Portal**.
-- **Interactive Scheduling Math Walkthrough:** 4-step explanation of serial number time formulas and delay safeguards.
-- **Enterprise Features Grid:** Overview of delay algorithms, WhatsApp & SMS simulation, Recharts analytics, and local storage persistence.
-
-### 1. 🏥 Admin / Receptionist Dashboard (`/admin`)
-- **Real-Time KPI Cards:** Total Appointments Today, Patients Waiting, In-Consultation, Completed Consultations, Delayed Slots, and Cancelled Slots.
-- **Queue Analytics Flow:** Recharts interactive bar chart tracking hourly appointment status distribution (Completed, Waiting, Delayed).
-- **Appointment Management (`/admin/appointments`):**
-  - Search patients by name, phone (+91 format), serial number (`#3`), or Appointment ID (`APT-1003`).
-  - Filter by Doctor, Status, and Date.
-  - Sort by serial number ascending / descending.
-  - Book new appointment with **automatic serial number increment and time calculation**.
-  - Cancel appointment with automated notification dispatch simulation.
-- **Patient Management (`/admin/patients`):**
-  - Register new patients (Name, Age, Gender, Phone, Email, Blood Group, Allergies).
-  - Medical visit history and quick record lookup.
-- **Doctor & OPD Management (`/admin/doctors`):**
-  - Doctor profiles with specialization, consultation slot duration, clinic opening/closing hours, room numbers, and on-duty availability toggles.
-- **Dedicated Delay Management Engine (`/admin/delays`):**
-  - Select doctor and announce delay in minutes (+10m, +15m, +20m, +30m, +60m presets or custom minutes).
-  - Automatically recalculates revised estimated arrival times for all pending patients.
-  - **Safeguard Rule:** Completed and Cancelled appointments are strictly locked and never modified.
-  - Side-by-side comparison of original vs. revised arrival times.
-  - Confirmation dialog before applying changes.
-  - Broadcasts simulated WhatsApp and SMS notifications with delay reason.
-- **Notification Feed (`/admin/notifications`):**
-  - Audit trail of all simulated SMS and WhatsApp alerts dispatched to patients.
-  - Test ping trigger for real-time dispatch verification.
+A modern, production-grade healthcare SaaS web application built with **React, Vite, and Tailwind CSS**. Designed for multi-doctor outpatient departments (OPDs) and private clinics to handle appointment scheduling, dynamic serial number queue calculation, doctor delay announcements, automatic schedule recalculation, and simulated real-time WhatsApp & SMS patient notifications.
 
 ---
 
-### 2. 🩺 Doctor Dashboard (`/doctor`)
-- **Active Consultation Desk:**
-  - Patient card displaying current patient's name, serial number, contact, and chief complaints.
-  - **Live Consultation Timer:** Tracks consultation elapsed time in minutes and seconds.
-  - **Consultation & Prescription Notes:** Doctor can write clinical diagnoses and notes.
-  - **Status Actions:** *Start Consultation*, *Complete Consultation*, and *Mark Patient Absent / No-Show*.
-- **Queue Controls:**
-  - *Pause / Resume Queue* button for doctors stepping out for breaks.
-  - *Quick Delay Announcement* (+10m, +15m, +30m) directly from desk.
-- **Today's Queue (`/doctor/queue`):**
-  - Complete roster of today's patients ordered by serial number with live delay adjustments.
-- **Patient History (`/doctor/history`):**
-  - List of patients seen today with consultation notes and prescription records.
+## 🚀 Key Features
+
+### 1. 🏥 Admin / Receptionist Dashboard
+- **Executive Operations Overview**:
+  - Live KPIs: Total appointments today, patients waiting in clinic lounge, completed consultations, cancelled slots, delayed appointments, and average waiting times.
+  - **Recharts Analytics**: Hourly patient flow distribution (Scheduled vs Waiting vs Completed) and status breakdown donut chart.
+  - **Doctor Duty Cards**: Real-time room availability, slot durations, and active delay indicators.
+  - **Live Upcoming Queue**: Quick status preview of next patients in line.
+- **Appointment Management**:
+  - Search by patient name, token/serial number, appointment ID, or phone number.
+  - Multi-criteria filtering by appointment status (`Scheduled`, `Waiting`, `In Consultation`, `Completed`, `Cancelled`, `Absent`) and consulting doctor.
+  - Token sorting (ascending/descending).
+  - Add, edit, cancel, and inspect detailed appointment modal.
+  - Automated token serial number assignment and time slot calculation formula:
+    $$\text{Appointment Time} = \text{Opening Time} + (\text{Serial Number} - 1) \times \text{Consultation Duration}$$
+- **Patient Management**:
+  - Patient directory with demographics: Name, Age, Gender, Phone, Email, Blood Group, Address, and Clinical History.
+  - Full consultation visit timeline & history per patient.
+  - Register, edit, and delete patient records.
+- **Doctor Management**:
+  - Doctor profiles (qualifications, department, experience, assigned room).
+  - Configurable consultation durations (e.g. 15 min or 20 min).
+  - Clinic opening & closing times.
+  - One-click duty toggle (`Available` vs `On Break`).
+- **Dedicated Delay Announcement Engine**:
+  - Announce additional doctor delays in minutes: Quick-select buttons (+10, +15, +20, +30, +60 min) or custom input.
+  - Clinical reason tagging (Emergency clinical procedure, ICU rounds, Traffic delay, etc.).
+  - **Automated Schedule Recalculation**: Automatically shifts estimated consultation times for all pending patients while strictly preserving completed and cancelled slots.
+  - Live recalculation impact preview table showing old vs new times before applying.
+  - Confirmation modal with safety checks.
+  - Immediate simulated broadcast dispatch to affected patients via WhatsApp and SMS.
+- **Notification Management**:
+  - Comprehensive audit logs of all WhatsApp and SMS messages.
+  - Delivery status tracking (`Delivered`, `Sent`, `Read`), timestamps, and categories.
+  - Direct message composer to broadcast custom alerts.
 
 ---
 
-### 3. 📱 Patient Portal (`/patient`)
-- **Mobile-Friendly Live Queue Tracker:**
-  - Search by **Appointment ID** (e.g. `APT-1003`, `1002`) or **10-Digit Indian Phone Number** (e.g. `9819283746`).
-  - Pre-filled one-click demo pills for quick evaluation (`APT-1003 (Waiting)`, `APT-1002 (In Consultation)`, etc.).
-- **Prominent Delay Alert Banner:**
-  - Displays high-visibility notification banner when doctor announces a delay:
-    > *"⚠️ Doctor is Running 20 Minutes Late due to an emergency case. Your revised consultation time is 11:20 AM (was 11:00 AM)."*
-- **Queue Progress & Countdown:**
-  - Live count of **patients ahead of you** in queue (e.g., *2 Patients Ahead of You*).
-  - Estimated waiting time countdown based on consultation slot duration.
-  - 4-stage visual lifecycle: *Booked -> In Queue -> Consulting -> Completed*.
-- **Digital Token Slip:**
-  - Verified appointment pass with assigned Serial Number, Doctor Name, OPD Room Number, and printable slip download.
-- **Notification History Log:**
-  - Personal log of WhatsApp and SMS messages sent specifically to this patient.
+### 2. 🩺 Doctor Consultation Room Console
+- **Doctor Profile Header**: Shows active doctor name, OPD suite, standard slot length, and current delay status.
+- **"Now Serving" Active Patient Card**:
+  - Prominent in-room patient badge with age, gender, contact, and chief complaints.
+  - "Start Consultation", "Mark Consultation as Completed", and "Mark Absent" actions.
+- **Queue Controls**:
+  - "Pause Queue / Take Break" toggle.
+  - Instant "Announce Delay" trigger.
+  - Queue overview displaying patients waiting in lounge vs upcoming scheduled arrivals.
+- **Doctor Switcher**: Seamlessly switch between Dr. Rajesh Sharma (Cardiology) and Dr. Priya Patel (General Medicine).
 
 ---
 
-## 📐 Mathematical Scheduling & Delay Logic
-
-### Base Formula
-For any doctor with Clinic Opening Time $T_0$ and slot duration $D$:
-$$\text{Scheduled Time} = T_0 + (\text{Serial Number} - 1) \times D$$
-
-**Example:**
-- Doctor Opening Time: `10:00 AM`, Slot Duration: `15 mins`
-- Serial 1: `10:00 AM`
-- Serial 2: `10:15 AM`
-- Serial 3: `10:30 AM`
-- Serial 4: `10:45 AM`
-- Serial 5: `11:00 AM`
-
-### Delay Recalculation Engine
-When a delay of $\Delta$ minutes is announced:
-$$\text{Revised Estimated Time} = \text{Original Scheduled Time} + \Delta$$
-- **Safeguard Rules:**
-  1. Appointments with status `Completed`, `Cancelled`, or `Absent` retain their recorded state and are **never** altered.
-  2. Original booked times are preserved alongside revised estimated times.
-  3. All pending (`Scheduled` or `Delayed`) patients are updated atomically and receive automated simulated notifications.
+### 3. 📱 Patient Portal
+- **Mobile-First Responsive Interface**:
+  - Search by Appointment ID (e.g. `APT-1003`) or 10-digit registered phone number (e.g. `9717012345`).
+  - **1-Click Demo Patient Quick Select**: Easily demonstrate different patient states in 1 click.
+- **Live Queue & Delay Card**:
+  - Prominent Token / Serial Number badge.
+  - Original scheduled time vs revised estimated consultation time.
+  - **Prominent Delay Alert Banner**: Displays why the doctor is delayed and by how many minutes.
+  - **Real-Time Queue Position**: Shows exact count of patients ahead in the queue.
+  - **Estimated Waiting Time**: Calculated from queue position and doctor consultation pace.
+  - **Self Check-In Button**: "I have arrived at the clinic" updates clinic reception in real time.
+  - Patient-specific notification log history.
 
 ---
 
 ## 🛠️ Technology Stack
 
-- **Framework:** React 18 (Functional components & Hooks)
-- **Bundler:** Vite 6
-- **Styling:** Tailwind CSS (Healthcare teal & medical emerald palette)
-- **Routing:** React Router DOM v6
-- **Icons:** Lucide React
-- **Analytics:** Recharts
-- **Toast Notifications:** React Hot Toast
-- **Persistence:** Browser `localStorage` with a 1-click **Reset Demo Data** action
+| Layer | Technology |
+|---|---|
+| **Framework** | React 18 with Vite |
+| **Styling** | Tailwind CSS (Tailwind typography, custom color palette: Deep Teal `#0f766e` & Emerald) |
+| **Routing** | React Router DOM v6 |
+| **Icons** | Lucide React |
+| **Charts** | Recharts |
+| **Notifications** | React Hot Toast |
+| **Data Persistence** | State management + Browser `localStorage` with failover dummy data |
 
 ---
 
-## 🚀 Running the Project Locally
+## 📂 Project Architecture
+
+```
+src/
+├── components/
+│   ├── appointments/       # AppointmentModal, AppointmentDetailsModal
+│   ├── common/             # Badge, Modal, ConfirmDialog, StatCard, SearchInput, RoleSwitcher
+│   ├── delay/              # DelayModal, DelayAlertBanner
+│   ├── layout/             # AdminLayout, DoctorLayout, PatientLayout, Navbar, Sidebar
+│   └── patients/           # PatientModal, PatientHistoryModal
+├── context/
+│   ├── ClinicContext.jsx   # Core clinic state, recalculation logic, storage sync
+│   └── AuthRoleContext.jsx # Role management (Admin, Doctor, Patient)
+├── data/
+│   ├── initialDoctors.js   # Doctors (Dr. Rajesh Sharma, Dr. Priya Patel)
+│   ├── initialPatients.js  # 16 realistic Indian patient records
+│   ├── initialAppointments.js # Full appointment dataset across doctors & statuses
+│   └── initialNotifications.js# WhatsApp & SMS audit logs
+├── pages/
+│   ├── admin/              # AdminDashboard, AppointmentsPage, PatientsPage, DoctorsPage, DelayManagementPage, NotificationsPage, SettingsPage
+│   ├── doctor/             # DoctorDashboard, DoctorQueuePage, DoctorPatientHistoryPage, DoctorNotificationsPage, DoctorSettingsPage
+│   ├── patient/            # PatientPortalPage
+│   └── NotFoundPage.jsx
+├── utils/
+│   ├── timeCalculations.js # Slot formulas, delay arithmetic, 12-hour formatters
+│   ├── storage.js          # LocalStorage persistence wrapper
+│   └── idGenerators.js     # Unique ID formatters (APT-xxxx, PAT-xxx)
+├── App.jsx                 # Route definitions
+├── main.jsx                # Application entry point with providers
+└── index.css               # Tailwind directives and custom animation styles
+```
+
+---
+
+## 🏃 Running the Application Locally
 
 ### Prerequisites
-- Node.js (v18 or higher, tested on v22)
+- Node.js (v18 or higher)
 - npm (v9 or higher)
 
 ### Installation & Launch
+```bash
+# 1. Install dependencies (already completed)
+npm install
 
-1. Open a terminal in the project directory:
-   ```bash
-   cd c:\Users\Ankit\Desktop\appointment_booking\Frontend
-   ```
+# 2. Run local development server
+npm run dev
 
-2. Dependencies are already installed. Start the development server:
-   ```bash
-   npm run dev
-   ```
-   Or from the root directory:
-   ```bash
-   npm run dev
-   ```
+# 3. Build for production
+npm run build
 
-3. Open your browser and navigate to:
-   ```
-   http://localhost:3000
-   ```
+# 4. Preview production build
+npm run preview
+```
+
+The application runs on `http://localhost:3000` (or `http://localhost:5173`).
 
 ---
 
-## 🧪 Quick Test Scenarios for Demonstration
+## 🧪 Demonstration & Testing Guide
 
-1. **Test Delay Recalculation (Admin):**
-   - Go to **Delay Management** (`/admin/delays`).
-   - Select **Dr. Rajesh Sharma**.
-   - Click the **+20m** preset and click **Apply Delay & Notify Patients**.
-   - Notice that Serial #1 (Completed) and Serial #7 (Cancelled) remain unchanged, while Serials #3, #4, #5, #6, #8, #9, and #10 have their times bumped by 20 minutes with amber badges!
-   - Check the **Notifications** tab (`/admin/notifications`) to see newly dispatched WhatsApp and SMS messages.
+1. **Role Switching**:
+   - Use the **Active Mode** dropdown in the top right navbar to toggle between:
+     - `Admin / Receptionist`: Full operational controls.
+     - `Dr. Rajesh Sharma` or `Dr. Priya Patel`: Doctor consultation views.
+     - `Patient Portal`: Public patient tracking view.
 
-2. **Test Doctor Consultation Desk (Doctor):**
-   - Click the role switcher in the top bar to switch to **Doctor Portal** (`/doctor`).
-   - Notice Dr. Rajesh Sharma's active queue.
-   - Click **Call Next: Serial #3 (Rohan Sharma)**.
-   - Watch the consultation timer begin ticking in real-time.
-   - Enter prescription notes and click **Complete Consultation**.
+2. **Testing Schedule Delay Propagation**:
+   - Go to **Delay Management** or click **Announce Delay** on the Admin/Doctor dashboard.
+   - Choose a doctor (e.g. Dr. Rajesh Sharma) and pick a delay (e.g. `+30 min`).
+   - Notice the **Live Recalculation Preview**: All pending patients (e.g. Token #3, #4, #5) get updated times (e.g. 10:30 AM $\rightarrow$ 11:00 AM), while completed Token #1 and cancelled Token #8 remain strictly untouched.
+   - Click **Preview & Apply Delay** and confirm.
+   - Switch to **Patient Portal**: Look up Token #3 (`APT-1003` or phone `9717012345`). Notice the prominent amber delay alert banner, the revised 11:00 AM consultation time, and the simulated WhatsApp delay message in their timeline!
 
-3. **Test Patient Live Tracker (Patient Portal):**
-   - Switch to **Patient Portal** (`/patient`).
-   - Click the sample pill **APT-1003 (Waiting & Delayed)**.
-   - Observe the prominent yellow delay banner, the live counter showing patients ahead in queue, estimated arrival time, and the complete WhatsApp/SMS notification timeline.
+3. **Doctor Consultation Flow**:
+   - Switch to **Doctor Console** (`/doctor`).
+   - Click **Start Consultation** or **Mark Completed** for Token #2.
+   - Notice the queue advances and notification logs update.
 
-4. **Test Booking New Appointment:**
-   - In Admin, click **Add Appointment**.
-   - Notice the next Serial Number and time slot are computed automatically based on the doctor's opening time and slot duration!
+4. **Reset Demo Data**:
+   - Click the **Reset Demo** button in the top navbar or under **Settings** anytime to restore fresh demonstration data.
